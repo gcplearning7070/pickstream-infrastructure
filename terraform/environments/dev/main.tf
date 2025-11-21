@@ -83,16 +83,20 @@ module "artifact_registry" {
   ]
 }
 
-# Workload Identity Federation Module
-module "workload_identity" {
-  source = "../../modules/workload-identity"
+# Workload Identity Federation Module - Managed manually outside Terraform
+# Create manually with:
+# gcloud iam workload-identity-pools create github-actions-pool --location=global --project=gcp-terraform-demo-474514
+# gcloud iam workload-identity-pools providers create-oidc github-actions-provider --location=global --workload-identity-pool=github-actions-pool --issuer-uri="https://token.actions.githubusercontent.com" --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.repository=assertion.repository,attribute.repository_owner=assertion.repository_owner" --attribute-condition="assertion.repository_owner == 'gcpt0801'"
 
-  project_id            = var.project_id
-  github_repository     = var.github_repository
-  service_account_name  = module.iam.github_service_account_name
-  attribute_condition   = "assertion.repository_owner == '${var.github_org}'"
-
-  depends_on = [
-    module.iam
-  ]
-}
+# module "workload_identity" {
+#   source = "../../modules/workload-identity"
+#
+#   project_id            = var.project_id
+#   github_repository     = var.github_repository
+#   service_account_name  = module.iam.github_service_account_name
+#   attribute_condition   = "assertion.repository_owner == '${var.github_org}'"
+#
+#   depends_on = [
+#     module.iam
+#   ]
+# }

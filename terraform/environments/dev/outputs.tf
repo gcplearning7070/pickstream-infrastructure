@@ -45,18 +45,17 @@ output "artifact_registry_url" {
   value       = module.artifact_registry.repository_url
 }
 
-output "artifact_registry_location" {
-  description = "Artifact Registry location"
-  value       = module.artifact_registry.location
-}
-
-# Workload Identity outputs
-output "workload_identity_provider" {
-  description = "Workload Identity Provider for GitHub Actions"
-  value       = module.workload_identity.workload_identity_provider
+output "artifact_registry_repository_id" {
+  description = "Artifact Registry repository ID"
+  value       = module.artifact_registry.repository_id
 }
 
 output "github_service_account_email" {
   description = "GitHub Actions service account email"
   value       = module.iam.github_service_account_email
 }
+
+# Workload Identity - Managed manually
+# After cluster creation, create with:
+# gcloud iam workload-identity-pools create github-actions-pool --location=global --project=gcp-terraform-demo-474514
+# gcloud iam workload-identity-pools providers create-oidc github-actions-provider --location=global --workload-identity-pool=github-actions-pool --issuer-uri="https://token.actions.githubusercontent.com" --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.repository=assertion.repository,attribute.repository_owner=assertion.repository_owner" --attribute-condition="assertion.repository_owner == 'gcpt0801'"
