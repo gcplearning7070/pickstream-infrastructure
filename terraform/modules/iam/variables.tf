@@ -28,7 +28,7 @@ variable "kubernetes_service_account" {
 variable "github_sa_name" {
   description = "GitHub Actions service account name"
   type        = string
-  default     = "gcp-terraform-demo"
+  default     = "gcp-terraform-demp"
 }
 
 variable "github_sa_display_name" {
